@@ -1,0 +1,1 @@
+This code allows to register event in order to using them later. The whole project is still in progress.
