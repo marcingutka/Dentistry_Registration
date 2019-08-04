@@ -1,3 +1,4 @@
+
 ﻿using System.Data.SqlClient;
 
 namespace ReservationModule.SqlAccess
@@ -16,3 +17,4 @@ namespace ReservationModule.SqlAccess
         }
     }
 }
+

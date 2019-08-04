@@ -7,13 +7,14 @@ namespace ReservationModule.Output
 {
     public class OutputSQLServer : IOutput
     {
+        static string Table { get; } = SqlConnect.Table;
         public void Log(ReservationArgs args)
-        {            
+        {
             using (SqlConnection conn = SqlConnect.Connect())
             {
                 var sqlDate = args.Date.ToString("yyyy-MM-dd HH:mm:ss");
-                string sql = "INSERT into "+ SqlConnect.Table +" (Name, Surname, Operation, Date, Price, OperationID) VALUES (@name,@surname,@operation,@date,@price,@operationID)";
-                                             
+                string sql = "INSERT into " + Table + " (Name, Surname, Operation, Date, Price, OperationID) VALUES (@name,@surname,@operation,@date,@price,@operationID)";
+
                 using (SqlCommand cmd = new SqlCommand(sql))
                 {
                     cmd.Connection = conn;
@@ -28,7 +29,6 @@ namespace ReservationModule.Output
                     {
                         conn.Open();
                         cmd.ExecuteNonQuery();
-                        //Console.WriteLine("Rezerwacja w bazie danych została wykonana poprawnie!");
                     }
                     catch (Exception ex)
                     {
@@ -39,19 +39,18 @@ namespace ReservationModule.Output
                         conn.Close();
                     }
                 }
-                
+
             }
 
 
         }
         public void Unlog(List<ReservationArgs> list)
         {
-            string table = "Operations";
             using (SqlConnection conn = SqlConnect.Connect())
             {
                 foreach (ReservationArgs args in list)
                 {
-                    string sql = "DELETE FROM " + table + " WHERE OperationID=@operationID";
+                    string sql = "DELETE FROM " + Table + " WHERE OperationID=@operationID";
                     using (SqlCommand cmd = new SqlCommand(sql))
                     {
                         cmd.Connection = conn;
@@ -61,7 +60,7 @@ namespace ReservationModule.Output
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
-                            Console.WriteLine("Usunięto zabieg "+ args.Operation + " klienta " + args.Name + " " + args.Surname +"(data: " + args.Date +")");
+                            Console.WriteLine("Usunięto zabieg " + args.Operation + " klienta " + args.Name + " " + args.Surname + "(data: " + args.Date + ")");
 
                         }
                         catch (Exception ex)
@@ -78,29 +77,28 @@ namespace ReservationModule.Output
         }
         public void DeleteAll()
         {
-            string table = "Operations";
             using (SqlConnection conn = SqlConnect.Connect())
-            {                
-                string sql = "DELETE FROM " + table + " ";
+            {
+                string sql = "DELETE FROM " + Table + " ";
                 using (SqlCommand cmd = new SqlCommand(sql))
                 {
-                   cmd.Connection = conn;
+                    cmd.Connection = conn;
 
-                   try
-                   {
-                      conn.Open();
-                      cmd.ExecuteNonQuery();                            
-                   }
-                   catch (Exception ex)
-                   {
-                      Console.WriteLine("Exception: " + ex.Message);
-                   }
-                   finally
-                   {
-                      conn.Close();
-                   }
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception: " + ex.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
                 }
-                
+
             }
 
         }
